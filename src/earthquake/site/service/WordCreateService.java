@@ -18,7 +18,20 @@ import java.util.List;
 @Service
 public class WordCreateService{
 
-    public void createBasicInfo(EarthquakeInfo basicInfo, EarthquakeAdministrativeDivision earthquakeAdministrativeDivision, List<EarthquakeInfo> historyEarthquakeCounty, Object weatherInfo)  throws IOException {
+    public void createBasicInfo(
+            EarthquakeInfo basicInfo,
+            EarthquakeAdministrativeDivision earthquakeAdministrativeDivision,
+            List<EarthquakeInfo> historyEarthquakeCounty,
+            Object weatherInfo,
+            Object nearCity,
+            Object nearCounty)  throws IOException {
+        if(weatherInfo instanceof String){
+            weatherInfo = new Object();
+        }
+        if(nearCity instanceof String){
+            nearCity = new Object();
+        }
+        System.out.println(weatherInfo);
         HashMap map = new HashMap();
         map.put("longitude", basicInfo.getLongitude());
         map.put("latitude", basicInfo.getLatitude());
@@ -31,13 +44,18 @@ public class WordCreateService{
         map.put("realm", earthquakeAdministrativeDivision.getRealm());
         map.put("population", earthquakeAdministrativeDivision.getPopulation());
         map.put("administrative", earthquakeAdministrativeDivision.getAdministrativeArea());
-        map.put("structure", earthquakeAdministrativeDivision.getGeoStructure());
+        map.put("geoTerrain", earthquakeAdministrativeDivision.getGeoTerrain());
+        map.put("geoEnvironment", earthquakeAdministrativeDivision.getGeoEnvironment());
+        map.put("geoStructure", earthquakeAdministrativeDivision.getGeoStructure());
+        map.put("naturalSource", earthquakeAdministrativeDivision.getNaturalSource());
         map.put("climate", earthquakeAdministrativeDivision.getClimate());
         map.put("historyEarthquakeCounty",historyEarthquakeCounty);
         map.put("weatherInfo",weatherInfo);
-        System.out.println(historyEarthquakeCounty);
+        map.put("nearCity",nearCity);
+        map.put("nearCounty", nearCounty);
+        //System.out.println(map);
         System.out.println("create word function start.........");
-        basicCreate(basicInfo, "first.ftl", 1, map);
+        basicCreate(basicInfo, "temp.ftl", 1, map);
     }
     /**
      * 创建文件夹及文件并写入数据
@@ -65,9 +83,9 @@ public class WordCreateService{
         // 本地文挡所在目录
         String directory = "output\\"+year+"\\";
         // 服务器文档所在目录
-//        String directory = "webapps\\ROOT\\output\\"+year+"\\";
+        //String directory = "webapps\\ROOT\\output\\"+year+"\\";
         // 每个地震文件夹名称
-////        String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
+//        String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
         String secondDir = directory + eventID + "\\";
         File file = new File(directory);
         System.out.println(file.getAbsolutePath());

@@ -229,7 +229,15 @@ public class OuterDataService {
                         break;
                 }
             }
-
+            String pattern= "\\\\[\\d+\\\\]";
+            administrative.replaceAll(pattern,"");
+            population.replaceAll(pattern,"");
+            naturalSource.replaceAll(pattern,"");
+            climate.replaceAll(pattern,"");
+            environment.replaceAll(pattern,"");
+            terrain.replaceAll(pattern,"");
+            structure.replaceAll(pattern,"");
+            realm.replaceAll(pattern,"");
             //写数据库
             EarthquakeAdministrativeDivision earthquakeAdministrativeDivision = new EarthquakeAdministrativeDivision();
             earthquakeAdministrativeDivision.setAdministrativeArea(administrative);
