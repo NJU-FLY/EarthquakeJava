@@ -100,7 +100,7 @@ public class BriefController {
            EarthquakeAdministrativeDivision earthquakeAdministrativeDivision = outerDataService.getBaike(place);
             result.put("division",earthquakeAdministrativeDivision);
             // 获取天气信息
-            Object weatherInfo = outerDataService.getWeather(city);
+            Object weatherInfo = outerDataService.getWeather(place);
             result.put("weatherInfo", weatherInfo);
             // 获取周边区县
             Object nearCounty = outerDataService.getNearDistrict(city, county);
@@ -115,7 +115,9 @@ public class BriefController {
                     earthquakeInfoList.get(0),
                     earthquakeAdministrativeDivision,
                     historyEarthquakeCity,
-                    weatherInfo
+                    weatherInfo,
+                    nearCity,
+                    nearCounty
 
             );
 
