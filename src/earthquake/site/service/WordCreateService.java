@@ -11,6 +11,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2017/8/1.
@@ -20,22 +21,33 @@ public class WordCreateService{
 
     public void createBasicInfo(EarthquakeInfo basicInfo, EarthquakeAdministrativeDivision earthquakeAdministrativeDivision, List<EarthquakeInfo> historyEarthquakeCounty, Object weatherInfo)  throws IOException {
         HashMap map = new HashMap();
+        // 以字符串的形式保存数字，以保证输出时ftl不会自动千分位转换
+        int year = basicInfo.getEarthquakeTime().getYear()+1900;
+        String yearStr = "" +year;
+        String pattern = "\\\\[\\d\\\\]";
+        Pattern r = Pattern.compile(pattern);
+
         map.put("longitude", basicInfo.getLongitude());
         map.put("latitude", basicInfo.getLatitude());
         map.put("magnitude", basicInfo.getMagnitude());
         map.put("depth", basicInfo.getDepth());
+        map.put("province", basicInfo.getProvince());
+        map.put("city", basicInfo.getCity());
         map.put("county", basicInfo.getCounty());
-        map.put("year", basicInfo.getEarthquakeTime().getYear()+1900);
+        map.put("year", yearStr);
         map.put("month", basicInfo.getEarthquakeTime().getMonth()+1);
         map.put("day", basicInfo.getEarthquakeTime().getDay());
-        map.put("realm", earthquakeAdministrativeDivision.getRealm());
-        map.put("population", earthquakeAdministrativeDivision.getPopulation());
-        map.put("administrative", earthquakeAdministrativeDivision.getAdministrativeArea());
-        map.put("structure", earthquakeAdministrativeDivision.getGeoStructure());
-        map.put("climate", earthquakeAdministrativeDivision.getClimate());
+        map.put("hour", basicInfo.getEarthquakeTime().getHours());
+        map.put("minute", basicInfo.getEarthquakeTime().getMinutes());
+        map.put("realm", earthquakeAdministrativeDivision.getRealm().replaceAll(pattern,""));
+        map.put("population", earthquakeAdministrativeDivision.getPopulation().replaceAll(pattern,""));
+        map.put("administrative", earthquakeAdministrativeDivision.getAdministrativeArea().replaceAll(pattern,""));
+        map.put("structure", earthquakeAdministrativeDivision.getGeoStructure().replaceAll(pattern,""));
+        map.put("climate", earthquakeAdministrativeDivision.getClimate().replaceAll(pattern,""));
         map.put("historyEarthquakeCounty",historyEarthquakeCounty);
         map.put("weatherInfo",weatherInfo);
-        System.out.println(historyEarthquakeCounty);
+        System.out.println(earthquakeAdministrativeDivision.getRealm().replaceAll(pattern,""));
+        System.out.println(basicInfo.getEarthquakeTime().getYear()+1900);
         System.out.println("create word function start.........");
         basicCreate(basicInfo, "first.ftl", 1, map);
     }
@@ -65,7 +77,7 @@ public class WordCreateService{
         // 本地文挡所在目录
         String directory = "output\\"+year+"\\";
         // 服务器文档所在目录
-//        String directory = "webapps\\ROOT\\output\\"+year+"\\";
+        //String directory = "C:\\Tomcat8\\webapps\\ROOT\\output\\"+year+"\\";
         // 每个地震文件夹名称
 ////        String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
         String secondDir = directory + eventID + "\\";

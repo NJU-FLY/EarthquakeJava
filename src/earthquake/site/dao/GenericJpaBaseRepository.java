@@ -171,7 +171,7 @@ GenericJpaBaseRepository<ID extends Serializable, E, F>
         System.out.println(query);
         TypedQuery<E> typedQuery = entityManager.createQuery(query, entityClass);
 
-        if (!attrsMap.get("pageCount").equals("")) {
+        if (attrsMap.get("pageCount") != null && !attrsMap.get("pageCount").equals("")) {
             Integer pageCount = Integer.parseInt((String) attrsMap.get("pageCount"));
             Integer pageNum = Integer.parseInt((String) attrsMap.get("pageNum"));
             typedQuery.setFirstResult((pageCount - 1) * pageNum).setMaxResults(pageNum);
