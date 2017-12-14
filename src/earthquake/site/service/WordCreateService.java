@@ -75,11 +75,11 @@ public class WordCreateService{
         Double magnitude = basicInfo.getMagnitude();
         // 日期作为输出目录，这里的日期应该作为地震发生的日期，以年命名，从基本信息basicInfo中提取
         // 本地文挡所在目录
-        String directory = "output\\"+year+"\\";
+        //String directory = "output\\"+year+"\\";
         // 服务器文档所在目录
-        //String directory = "C:\\Tomcat8\\webapps\\ROOT\\output\\"+year+"\\";
+        String directory = "C:\\Tomcat8\\webapps\\ROOT\\output\\"+year+"\\";
         // 每个地震文件夹名称
-////        String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
+////    String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
         String secondDir = directory + eventID + "\\";
         File file = new File(directory);
         System.out.println(file.getAbsolutePath());

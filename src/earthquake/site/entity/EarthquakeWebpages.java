@@ -31,7 +31,7 @@ public class EarthquakeWebpages {
     }
 
     @Basic
-    @Column(name = "event_id", nullable = true, insertable = true, updatable = true, length = 14)
+    @Column(name = "eventid", nullable = true, insertable = true, updatable = true, length = 14)
     public String getEventId() {
         return eventId;
     }
@@ -41,7 +41,7 @@ public class EarthquakeWebpages {
     }
 
     @Basic
-    @Column(name = "published_time", nullable = true, insertable = true, updatable = true, length = 30)
+    @Column(name = "publishedtime", nullable = true, insertable = true, updatable = true, length = 30)
     public String getPublishedTime() {
         return publishedTime;
     }
@@ -51,7 +51,7 @@ public class EarthquakeWebpages {
     }
 
     @Basic
-    @Column(name = "type_name", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "typename", nullable = true, insertable = true, updatable = true, length = 255)
     public String getTypeName() {
         return typeName;
     }
@@ -111,7 +111,7 @@ public class EarthquakeWebpages {
     }
 
     @Basic
-    @Column(name = "crawled_time", nullable = false, insertable = true, updatable = true)
+    @Column(name = "crawledtime", nullable = false, insertable = true, updatable = true)
     public Timestamp getCrawledTime() {
         return crawledTime;
     }

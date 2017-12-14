@@ -114,11 +114,8 @@ public class BriefController {
             wordCreateService.createBasicInfo(
                     earthquakeInfoList.get(0),
                     earthquakeAdministrativeDivision,
-                    historyEarthquakeCity,
-                    weatherInfo,
-                    nearCity,
-                    nearCounty
-
+                    historyEarthquakeCounty,
+                    weatherInfo
             );
 
         }else{
