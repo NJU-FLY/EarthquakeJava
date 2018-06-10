@@ -1,6 +1,7 @@
 package earthquake.site.service;
 
 import earthquake.site.entity.EarthquakeAdministrativeDivision;
+import earthquake.site.entity.EarthquakeHistoryEntity;
 import earthquake.site.entity.EarthquakeInfo;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -19,13 +20,16 @@ import java.util.regex.Pattern;
 @Service
 public class WordCreateService{
 
-    public void createBasicInfo(EarthquakeInfo basicInfo, EarthquakeAdministrativeDivision earthquakeAdministrativeDivision, List<EarthquakeInfo> historyEarthquakeCounty, Object weatherInfo)  throws IOException {
+    public void createBasicInfo(
+            EarthquakeInfo basicInfo,
+            EarthquakeAdministrativeDivision earthquakeAdministrativeDivision,
+            List<EarthquakeHistoryEntity> historyEarthquakeCity,
+            Object weatherInfo,
+            Object nearCountry)  throws IOException {
         HashMap map = new HashMap();
         // 以字符串的形式保存数字，以保证输出时ftl不会自动千分位转换
         int year = basicInfo.getEarthquakeTime().getYear()+1900;
         String yearStr = "" +year;
-        String pattern = "\\\\[\\d\\\\]";
-        Pattern r = Pattern.compile(pattern);
 
         map.put("longitude", basicInfo.getLongitude());
         map.put("latitude", basicInfo.getLatitude());
@@ -36,18 +40,29 @@ public class WordCreateService{
         map.put("county", basicInfo.getCounty());
         map.put("year", yearStr);
         map.put("month", basicInfo.getEarthquakeTime().getMonth()+1);
-        map.put("day", basicInfo.getEarthquakeTime().getDay());
+        map.put("day", basicInfo.getEarthquakeTime().getDay()+4);
         map.put("hour", basicInfo.getEarthquakeTime().getHours());
         map.put("minute", basicInfo.getEarthquakeTime().getMinutes());
-        map.put("realm", earthquakeAdministrativeDivision.getRealm().replaceAll(pattern,""));
-        map.put("population", earthquakeAdministrativeDivision.getPopulation().replaceAll(pattern,""));
-        map.put("administrative", earthquakeAdministrativeDivision.getAdministrativeArea().replaceAll(pattern,""));
-        map.put("structure", earthquakeAdministrativeDivision.getGeoStructure().replaceAll(pattern,""));
-        map.put("climate", earthquakeAdministrativeDivision.getClimate().replaceAll(pattern,""));
-        map.put("historyEarthquakeCounty",historyEarthquakeCounty);
+        map.put("realm", earthquakeAdministrativeDivision.getRealm().replaceAll("\\[\\d+\\]",""));
+        map.put("population", earthquakeAdministrativeDivision.getPopulation().replaceAll("\\[\\d+\\]",""));
+        map.put("administrative", earthquakeAdministrativeDivision.getAdministrativeArea().replaceAll("\\[\\d+\\]",""));
+        map.put("environment", earthquakeAdministrativeDivision.getGeoEnvironment().replaceAll("\\[\\d+\\]",""));
+        map.put("terrain",earthquakeAdministrativeDivision.getGeoTerrain().replaceAll("\\[\\d+\\]",""));
+        map.put("structure", earthquakeAdministrativeDivision.getGeoStructure().replaceAll("\\[\\d+\\]",""));
+        map.put("climate", earthquakeAdministrativeDivision.getClimate().replaceAll("\\[\\d+\\]",""));
+        map.put("economics",earthquakeAdministrativeDivision.getEconomics().replaceAll("\\[\\d+\\]",""));
+        map.put("social",earthquakeAdministrativeDivision.getSocial().replaceAll("\\[\\d+\\]",""));
+        map.put("transport",earthquakeAdministrativeDivision.getTransport().replaceAll("\\[\\d+\\]",""));
+        map.put("travel",earthquakeAdministrativeDivision.getTravel().replaceAll("\\[\\d+\\]",""));
+        map.put("historyEarthquakeCounty",historyEarthquakeCity);
         map.put("weatherInfo",weatherInfo);
-        System.out.println(earthquakeAdministrativeDivision.getRealm().replaceAll(pattern,""));
-        System.out.println(basicInfo.getEarthquakeTime().getYear()+1900);
+        map.put("nearCountry",nearCountry);
+        System.out.println(earthquakeAdministrativeDivision.getRealm().replaceAll("\\[\\d\\]",""));
+        System.out.println(basicInfo.getEarthquakeTime());
+        System.out.println(basicInfo.getEarthquakeTime().getDay());
+        System.out.println(basicInfo.getEarthquakeTime().getHours());
+        System.out.println(nearCountry);
+        System.out.println(historyEarthquakeCity);
         System.out.println("create word function start.........");
         basicCreate(basicInfo, "first.ftl", 1, map);
     }
@@ -75,9 +90,9 @@ public class WordCreateService{
         Double magnitude = basicInfo.getMagnitude();
         // 日期作为输出目录，这里的日期应该作为地震发生的日期，以年命名，从基本信息basicInfo中提取
         // 本地文挡所在目录
-        //String directory = "output\\"+year+"\\";
+        String directory = "C:\\Users\\shixi\\IdeaProjects\\EarthquakeJava\\target\\EarthquakeJava-1.0.0-SNAPSHOT\\output\\"+year+"\\";
         // 服务器文档所在目录
-        String directory = "C:\\Tomcat8\\webapps\\ROOT\\output\\"+year+"\\";
+       // String directory = "C:\\Tomcat8\\webapps\\ROOT\\output\\"+year+"\\";
         // 每个地震文件夹名称
 ////    String secondDir = directory + year + "年"+ month +"月"+day+"日"+ province+county+magnitude+"级地震\\";
         String secondDir = directory + eventID + "\\";
@@ -116,8 +131,10 @@ public class WordCreateService{
     public void createWord(HashMap map,String templateName,String filePath,String fileName) throws IOException{
         Configuration configuration = new Configuration();
         configuration.setDefaultEncoding("utf-8");
+        // ftl文件路径在tomcat地bin文件下面
         configuration.setDirectoryForTemplateLoading(new File("templates\\"));
-        System.out.println(this.getClass());
+        System.out.println(configuration);
+        System.out.println(configuration.getTemplateLoader());
         // 模板
         Template t = null;
         try {

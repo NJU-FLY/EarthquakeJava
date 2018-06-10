@@ -153,6 +153,10 @@ public class OuterDataService {
             String realm = "";
             String environment = "";
             String climate = "";
+            String economics = "";
+            String social = "";
+            String transport = "";
+            String travel = "";
             Document doc = Jsoup.parse(resText);
             Elements level2 = doc.select(".level-2");
             for (Element element : level2) {
@@ -166,12 +170,31 @@ public class OuterDataService {
 //                        }
                         // 获取行政区划第一段内容，原来的有问题
                         administrative = administrative.concat(sib.text());
+                        sib = sib.nextElementSibling();
                         break;
                     case "人口民族":
                     case "人口":
                         while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
-                            population = population.concat(sib.text());
-                            sib = sib.nextElementSibling();
+                            if(sib.hasClass("level-3")){
+                                TextNode h3Text = sib.select("h3").get(0).textNodes().get(0);
+                                sib = sib.nextElementSibling();
+                                switch (h3Text.text()){
+                                    case"人口":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            population = population.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                    case"民族":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            population = population.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                }
+                            }else {
+                                sib = sib.nextElementSibling();
+                            }
                         }
                         break;
                     case "地理环境":
@@ -222,22 +245,126 @@ public class OuterDataService {
 
                         break;
                     case "自然资源":
+                    case "资源":
                         while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
-                            naturalSource = naturalSource.concat(sib.text());
+                            if (sib.hasClass("level-3")) {
+                                TextNode h3Text = sib.select("h3").get(0).textNodes().get(0);
+                                sib = sib.nextElementSibling();
+                                switch (h3Text.text()) {
+                                    case "土地资源":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            naturalSource = naturalSource.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                    case "水资源":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            naturalSource = naturalSource.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                }
+                            }else {
+                                sib = sib.nextElementSibling();
+                            }
+                        }
+                        break;
+                    case "经济":
+                    case "经济概况":
+                        while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
+                            if(sib.hasClass("level-3")){
+                                TextNode h3Text = sib.select("h3").get(0).textNodes().get(0);
+                                sib = sib.nextElementSibling();
+                                switch (h3Text.text()){
+                                    case"综述":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            economics = economics.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                }
+                            }else {
+                                sib = sib.nextElementSibling();
+                            }
+                        }
+                        break;
+                    case "社会事业":
+                    case "社会":
+                        while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
+                            if(sib.hasClass("level-3")){
+                                TextNode h3Text = sib.select("h3").get(0).textNodes().get(0);
+                                sib = sib.nextElementSibling();
+                                switch (h3Text.text()){
+                                    case"教育":
+                                    case "教育事业":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            social = social.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                    case"卫生":
+                                    case"卫生事业":
+                                    case"医疗卫生":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            social = social.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                }
+                            }else {
+                                sib = sib.nextElementSibling();
+                            }
+                        }
+                        break;
+                    case "交通":
+                    case "交通运输":
+                        while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
+                            transport = transport.concat(sib.text());
                             sib = sib.nextElementSibling();
+                        }
+                        break;
+                    case "旅游":
+                        while (sib.hasAttr("class") && !sib.hasClass("level-2")) {
+                            if(sib.hasClass("level-3")){
+                                TextNode h3Text = sib.select("h3").get(0).textNodes().get(0);
+                                sib = sib.nextElementSibling();
+                                switch (h3Text.text()){
+                                    case"景区":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            travel = travel.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                    case"游客":
+                                        while (sib.hasClass("para") || sib.hasClass("table-view")) {
+                                            travel = travel.concat(sib.text());
+                                            sib = sib.nextElementSibling();
+                                        }
+                                        break;
+                                }
+                            }else {
+                                sib = sib.nextElementSibling();
+                            }
                         }
                         break;
                 }
             }
-            String pattern= "\\\\[\\d+\\\\]";
-            administrative.replaceAll(pattern,"");
-            population.replaceAll(pattern,"");
-            naturalSource.replaceAll(pattern,"");
-            climate.replaceAll(pattern,"");
-            environment.replaceAll(pattern,"");
-            terrain.replaceAll(pattern,"");
-            structure.replaceAll(pattern,"");
-            realm.replaceAll(pattern,"");
+//            String pattern= "\\\\[\\d+\\\\]";
+//            administrative.replaceAll(pattern,"");
+//            population.replaceAll(pattern,"");
+//            naturalSource.replaceAll(pattern,"");
+//            climate.replaceAll(pattern,"");
+//            environment.replaceAll(pattern,"");
+//            terrain.replaceAll(pattern,"");
+//            structure.replaceAll(pattern,"");
+//            realm.replaceAll(pattern,"");
+//            economics.replaceAll(pattern,"");
+//            social.replaceAll(pattern,"");
+//            transport.replaceAll(pattern,"");
+            //取这些段落的第一句话，后面的太多，不要
+//            economics = economics.split("。")[0];
+//            social = social.split("。")[0];
+//            climate = climate.split("。")[0];
             //写数据库
             EarthquakeAdministrativeDivision earthquakeAdministrativeDivision = new EarthquakeAdministrativeDivision();
             earthquakeAdministrativeDivision.setAdministrativeArea(administrative);
@@ -248,6 +375,10 @@ public class OuterDataService {
             earthquakeAdministrativeDivision.setGeoTerrain(terrain);
             earthquakeAdministrativeDivision.setGeoStructure(structure);
             earthquakeAdministrativeDivision.setRealm(realm);
+            earthquakeAdministrativeDivision.setEconomics(economics);
+            earthquakeAdministrativeDivision.setSocial(social);
+            earthquakeAdministrativeDivision.setTransport(transport);
+            earthquakeAdministrativeDivision.setTravel(travel);
 //            divisionRepository.insert(earthquakeAdministrativeDivision);
             return earthquakeAdministrativeDivision;
 //        }

@@ -1,11 +1,9 @@
 package earthquake.site.controllers;
 
 import earthquake.site.dao.DivisionRepository;
+import earthquake.site.dao.HistoryRepository;
 import earthquake.site.dao.InfoRepository;
-import earthquake.site.entity.EarthquakeAdministrativeDivision;
-import earthquake.site.entity.EarthquakeDeployEntity;
-import earthquake.site.entity.EarthquakeInfo;
-import earthquake.site.entity.EarthquakeRespond;
+import earthquake.site.entity.*;
 import earthquake.site.forms.BriefSearchForm;
 import earthquake.site.service.OuterDataService;
 import earthquake.site.service.RespondService;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +31,8 @@ public class BriefController {
 
     @Inject
     private InfoRepository infoRepository;
+    @Inject
+    private HistoryRepository historyRepository;
     @Inject
     private DivisionRepository divisionRepository;
     @Inject
@@ -65,23 +66,23 @@ public class BriefController {
 
             historyForm.setCity(info.getCity());
             historyForm.setProvince(info.getProvince());
-            List<EarthquakeInfo> historyEarthquake = infoRepository.getEarthquakeInfoByCondition(historyForm);
+//            List<EarthquakeInfo> historyEarthquake = infoRepository.getEarthquakeInfoByCondition(historyForm);
 
-            List<EarthquakeInfo> historyEarthquakeCounty = new ArrayList<>();
-            List<EarthquakeInfo> historyEarthquakeCity = new ArrayList<>();
-
-            for (EarthquakeInfo earthquakeInfo : historyEarthquake) {
-                if(!earthquakeInfo.getEventId().equals(eventId) && (info.getCounty().contains(earthquakeInfo.getCounty()) || earthquakeInfo.getCounty().contains(info.getCounty()))){
-                    historyEarthquakeCounty.add(earthquakeInfo);
-                }
-            }
-            result.put("historyEarthquakeCounty", historyEarthquakeCounty);
-
-            for (EarthquakeInfo earthquakeInfo : historyEarthquake) {
-                if (!info.getCounty().contains(earthquakeInfo.getCounty()) && !earthquakeInfo.getCounty().contains(info.getCounty())){
-                    historyEarthquakeCity.add(earthquakeInfo);
-                }
-            }
+//            List<EarthquakeInfo> historyEarthquakeCounty = new ArrayList<>();
+            List<EarthquakeHistoryEntity> historyEarthquakeCity = new ArrayList<>();
+            historyEarthquakeCity = historyRepository.getHistoryEarthquake(info.getProvince());
+//            for (EarthquakeInfo earthquakeInfo : historyEarthquake) {
+//                if(!earthquakeInfo.getEventId().equals(eventId) && (info.getCounty().contains(earthquakeInfo.getCounty()) || earthquakeInfo.getCounty().contains(info.getCounty()))){
+//                    historyEarthquakeCounty.add(earthquakeInfo);
+//                }
+//            }
+//            result.put("historyEarthquakeCounty", historyEarthquakeCounty);
+//
+//            for (EarthquakeInfo earthquakeInfo : historyEarthquake) {
+//                if (!info.getCounty().contains(earthquakeInfo.getCounty()) && !earthquakeInfo.getCounty().contains(info.getCounty())){
+//                    historyEarthquakeCity.add(earthquakeInfo);
+//                }
+//            }
             // 历史地震记录
             result.put("historyEarthquakeCity", historyEarthquakeCity);
 
@@ -104,18 +105,25 @@ public class BriefController {
             result.put("weatherInfo", weatherInfo);
             // 获取周边区县
             Object nearCounty = outerDataService.getNearDistrict(city, county);
+            // 获取周边区县到震中距离
+            Double longit = earthquakeInfoList.get(0).getLongitude();
+            Double magni = earthquakeInfoList.get(0).getMagnitude();
+            if(nearCounty!=null&&!nearCounty.getClass().isArray()){
+                nearCounty = new Object[]{};
+            }
             result.put("nearCounty", nearCounty);
             // 获取周边城市
             Object nearCity = outerDataService.getNearDistrict(province, city);
             result.put("nearCity", nearCity);
             // 生成文档
             System.out.println("word create start........");
-            System.out.println(historyEarthquakeCounty);
+            System.out.println(historyEarthquakeCity);
             wordCreateService.createBasicInfo(
                     earthquakeInfoList.get(0),
                     earthquakeAdministrativeDivision,
-                    historyEarthquakeCounty,
-                    weatherInfo
+                    historyEarthquakeCity,
+                    weatherInfo,
+                    nearCounty
             );
 
         }else{

@@ -121,7 +121,7 @@ GenericJpaBaseRepository<ID extends Serializable, E, F>
         }
         if (!flag) {
             attrsMap.put("pageCount", "1");
-            attrsMap.put("pageNum", "10");
+            attrsMap.put("pageNum", "50");
         }
         return attrsMap;
     }

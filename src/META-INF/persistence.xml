@@ -3,6 +3,9 @@
 
     <persistence-unit name="NewPersistenceUnit">
         <class>earthquake.site.entity.EarthquakeInfo</class>
+        <class>earthquake.site.entity.EarthquakeHistoryEntity</class>
+        <class>earthquake.site.entity.EarthquakeAdministrativeDivisionEntity</class>
+        <class>earthquake.site.entity.EarthquakeAdministrativeDivision</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/earthquake"/>
             <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>

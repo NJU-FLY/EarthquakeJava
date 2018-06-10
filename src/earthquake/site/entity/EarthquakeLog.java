@@ -13,7 +13,6 @@ public class EarthquakeLog {
     private String status;
     private String url;
     private Timestamp time;
-    private String realm;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -56,14 +55,7 @@ public class EarthquakeLog {
         this.time = time;
     }
     @Basic
-    @Column(name = "realm", nullable = false, insertable = true, updatable = true)
-    public String getRealm() {
-        return realm;
-    }
 
-    public void setRealm(String realm) {
-        this.realm = realm;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -76,7 +68,6 @@ public class EarthquakeLog {
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (time != null ? !time.equals(that.time) : that.time != null) return false;
-        if (realm != null ? !realm.equals(that.realm) : that.realm != null) return false;
 
         return true;
     }
@@ -87,7 +78,6 @@ public class EarthquakeLog {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
-        result = 31 * result + (realm != null ? realm.hashCode() : 0);
         return result;
     }
 }

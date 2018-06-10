@@ -2,28 +2,28 @@ package earthquake.site.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by FLY on 2017/6/26 0026.
- */
 @Entity
-@Table(name = "earthquake_administrative_division", schema = "", catalog = "earthquake")
+@Table(name = "earthquake_administrative_division", schema = "earthquake", catalog = "")
 public class EarthquakeAdministrativeDivision {
     private int id;
     private String province;
     private String city;
     private String county;
-    private String geoEnvironment;
     private String geoTerrain;
     private String climate;
-    private String realm;
+    private String geoEnvironment;
     private String population;
     private String administrativeArea;
     private String naturalSource;
     private String geoStructure;
+    private String economics;
+    private String social;
+    private String transport;
+    private String realm;
+    private String travel;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -33,7 +33,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "province", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "province")
     public String getProvince() {
         return province;
     }
@@ -43,7 +43,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "city", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "city")
     public String getCity() {
         return city;
     }
@@ -53,7 +53,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "county", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "county")
     public String getCounty() {
         return county;
     }
@@ -63,17 +63,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "geo_environment", nullable = true, insertable = true, updatable = true, length = 2147483647)
-    public String getGeoEnvironment() {
-        return geoEnvironment;
-    }
-
-    public void setGeoEnvironment(String geoEnvironment) {
-        this.geoEnvironment = geoEnvironment;
-    }
-
-    @Basic
-    @Column(name = "geo_terrain", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "geo_terrain")
     public String getGeoTerrain() {
         return geoTerrain;
     }
@@ -83,7 +73,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "climate", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "climate")
     public String getClimate() {
         return climate;
     }
@@ -93,17 +83,17 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "realm", nullable = true, insertable = true, updatable = true, length = 2147483647)
-    public String getRealm() {
-        return realm;
+    @Column(name = "geo_environment")
+    public String getGeoEnvironment() {
+        return geoEnvironment;
     }
 
-    public void setRealm(String realm) {
-        this.realm = realm;
+    public void setGeoEnvironment(String geoEnvironment) {
+        this.geoEnvironment = geoEnvironment;
     }
 
     @Basic
-    @Column(name = "population", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "population")
     public String getPopulation() {
         return population;
     }
@@ -113,7 +103,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "administrative_area", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "administrative_area")
     public String getAdministrativeArea() {
         return administrativeArea;
     }
@@ -123,7 +113,7 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "natural_source", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "natural_source")
     public String getNaturalSource() {
         return naturalSource;
     }
@@ -133,13 +123,53 @@ public class EarthquakeAdministrativeDivision {
     }
 
     @Basic
-    @Column(name = "geo_structure", nullable = true, insertable = true, updatable = true, length = 2147483647)
+    @Column(name = "geo_structure")
     public String getGeoStructure() {
         return geoStructure;
     }
 
     public void setGeoStructure(String geoStructure) {
         this.geoStructure = geoStructure;
+    }
+
+    @Basic
+    @Column(name = "economics")
+    public String getEconomics() {
+        return economics;
+    }
+
+    public void setEconomics(String economics) {
+        this.economics = economics;
+    }
+
+    @Basic
+    @Column(name = "social")
+    public String getSocial() {
+        return social;
+    }
+
+    public void setSocial(String social) {
+        this.social = social;
+    }
+
+    @Basic
+    @Column(name = "transport")
+    public String getTransport() {
+        return transport;
+    }
+
+    public void setTransport(String transport) {
+        this.transport = transport;
+    }
+
+    @Basic
+    @Column(name = "realm")
+    public String getRealm() {
+        return realm;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
     }
 
     @Override
@@ -153,17 +183,20 @@ public class EarthquakeAdministrativeDivision {
         if (province != null ? !province.equals(that.province) : that.province != null) return false;
         if (city != null ? !city.equals(that.city) : that.city != null) return false;
         if (county != null ? !county.equals(that.county) : that.county != null) return false;
-        if (geoEnvironment != null ? !geoEnvironment.equals(that.geoEnvironment) : that.geoEnvironment != null)
-            return false;
         if (geoTerrain != null ? !geoTerrain.equals(that.geoTerrain) : that.geoTerrain != null) return false;
         if (climate != null ? !climate.equals(that.climate) : that.climate != null) return false;
-        if (realm != null ? !realm.equals(that.realm) : that.realm != null) return false;
+        if (geoEnvironment != null ? !geoEnvironment.equals(that.geoEnvironment) : that.geoEnvironment != null)
+            return false;
         if (population != null ? !population.equals(that.population) : that.population != null) return false;
         if (administrativeArea != null ? !administrativeArea.equals(that.administrativeArea) : that.administrativeArea != null)
             return false;
         if (naturalSource != null ? !naturalSource.equals(that.naturalSource) : that.naturalSource != null)
             return false;
         if (geoStructure != null ? !geoStructure.equals(that.geoStructure) : that.geoStructure != null) return false;
+        if (economics != null ? !economics.equals(that.economics) : that.economics != null) return false;
+        if (social != null ? !social.equals(that.social) : that.social != null) return false;
+        if (transport != null ? !transport.equals(that.transport) : that.transport != null) return false;
+        if (realm != null ? !realm.equals(that.realm) : that.realm != null) return false;
 
         return true;
     }
@@ -174,14 +207,27 @@ public class EarthquakeAdministrativeDivision {
         result = 31 * result + (province != null ? province.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (county != null ? county.hashCode() : 0);
-        result = 31 * result + (geoEnvironment != null ? geoEnvironment.hashCode() : 0);
         result = 31 * result + (geoTerrain != null ? geoTerrain.hashCode() : 0);
         result = 31 * result + (climate != null ? climate.hashCode() : 0);
-        result = 31 * result + (realm != null ? realm.hashCode() : 0);
+        result = 31 * result + (geoEnvironment != null ? geoEnvironment.hashCode() : 0);
         result = 31 * result + (population != null ? population.hashCode() : 0);
         result = 31 * result + (administrativeArea != null ? administrativeArea.hashCode() : 0);
         result = 31 * result + (naturalSource != null ? naturalSource.hashCode() : 0);
         result = 31 * result + (geoStructure != null ? geoStructure.hashCode() : 0);
+        result = 31 * result + (economics != null ? economics.hashCode() : 0);
+        result = 31 * result + (social != null ? social.hashCode() : 0);
+        result = 31 * result + (transport != null ? transport.hashCode() : 0);
+        result = 31 * result + (realm != null ? realm.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "travel")
+    public String getTravel() {
+        return travel;
+    }
+
+    public void setTravel(String travel) {
+        this.travel = travel;
     }
 }

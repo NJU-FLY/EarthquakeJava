@@ -22,7 +22,7 @@ public class WebpagesRepository extends GenericJpaBaseRepository<Integer, Earthq
             form.pageCount = "1";
         }
         if (form.pageNum == null || form.pageNum.equals("")) {
-            form.pageNum = "10";
+            form.pageNum = "50";
         }
 
         HashMap<String, Object> attrsMap = getConditionMap(form);
